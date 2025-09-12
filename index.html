@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>意念國際精品 線上訂購系統</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary-color: #c0a062; --primary-hover: #a18041; --background-color: #fdfdfd;
+      --card-background: #ffffff; --text-primary: #1e293b; --text-secondary: #64748b;
+      --border-color: #e2e8f0; --font-family: 'Noto Sans TC', sans-serif;
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+      --radius: 0.5rem; --gap: 1.25rem; --transition: all 0.2s ease-in-out;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-family: var(--font-family); color: var(--text-primary); }
+    body { background-color: var(--background-color); display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: var(--gap); }
+    .card {
+      background: var(--card-background); border-radius: var(--radius); box-shadow: var(--shadow-lg);
+      width: 100%; max-width: 1024px; display: flex; flex-direction: column;
+      height: calc(100vh - 2 * var(--gap)); padding: calc(var(--gap) * 1.5);
+      border: 1px solid var(--border-color);
+    }
+    .logo { display: block; margin: 0 auto var(--gap); max-width: 220px; flex-shrink: 0; }
+    h2 { text-align: center; color: var(--text-primary); font-size: 1.75rem; margin-bottom: var(--gap); font-weight: 700; flex-shrink: 0; }
+    form { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; }
+    .form-header { flex-shrink: 0; }
+    .form-body { flex-grow: 1; overflow-y: auto; padding: 0.5rem; margin: 0 -0.5rem; }
+    .form-footer { flex-shrink: 0; margin-top: auto; padding-top: var(--gap); border-top: 1px solid var(--border-color); }
+    label { font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); margin-bottom: -0.5rem; display: block; }
+    input, textarea {
+      width: 100%; padding: 0.75rem 1rem; font-size: 1rem; border: 1px solid var(--border-color);
+      border-radius: var(--radius); transition: var(--transition); font-family: var(--font-family); background-color: #f8fafc;
+      margin-top: calc(0.5rem + 4px);
+    }
+    input:focus, textarea:focus {
+      border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(192, 160, 98, 0.2); outline: none; background-color: white;
+    }
+    textarea { resize: vertical; min-height: 70px; }
+    #categoryContainer { display: flex; flex-wrap: wrap; gap: 0.75rem; padding-top: 0.5rem; margin-bottom: var(--gap); }
+    .category-btn {
+      padding: 0.6rem 1.2rem; border: 1px solid var(--border-color); border-radius: 2rem;
+      background-color: var(--card-background); color: var(--text-secondary);
+      font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: var(--transition);
+    }
+    .category-btn:hover { background-color: #f1f5f9; border-color: #cbd5e1; }
+    .category-btn.active { background-color: var(--primary-color); color: white; border-color: var(--primary-color); font-weight: 700; }
+    #itemsContainer { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--gap); }
+    .item-option {
+      background: var(--card-background); border-radius: var(--radius); box-shadow: var(--shadow-md);
+      display: flex; flex-direction: column; transition: var(--transition); cursor: pointer;
+      overflow: hidden; border: 1px solid var(--border-color);
+    }
+    .item-option:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+    .item-image-container { width: 100%; padding-top: 100%; position: relative; background-color: #f1f5f9; }
+    .item-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+    .item-details { display: flex; flex-direction: column; flex-grow: 1; padding: 1rem; }
+    .item-info { flex-grow: 1; margin-bottom: 1rem; }
+    .item-label { font-size: 1.05rem; font-weight: 500; line-height: 1.4; color: var(--text-primary); }
+    .item-unit { font-size: 0.85rem; color: var(--text-secondary); }
+    .item-price { font-size: 1rem; color: var(--primary-color); font-weight: 700; display: block; margin-top: 0.5rem; }
+    .qty-control { display: flex; align-items: center; justify-content: space-between; }
+    .qty-control input[type="number"] { width: 60px; text-align: center; padding: 0.25rem; font-size: 1rem; font-weight: 700; border: none; background: transparent; pointer-events: none; margin-top: 0; }
+    .qty-control button {
+      background: var(--border-color); color: var(--text-secondary); border: none; border-radius: 50%;
+      width: 32px; height: 32px; font-size: 1.5rem; font-weight: 400; cursor: pointer;
+      transition: var(--transition); display: flex; align-items: center; justify-content: center; line-height: 1;
+    }
+    .qty-control button:hover { background: var(--primary-color); color: white; }
+    .submit-btn {
+      background: var(--primary-color); color: white; border: none; width: 100%;
+      padding: 1rem; font-size: 1.1rem; font-weight: 700; border-radius: var(--radius);
+      cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    }
+    .submit-btn:hover { background: var(--primary-hover); box-shadow: var(--shadow-md); }
+    .submit-btn:disabled { background: #dcd0b8; cursor: not-allowed; box-shadow: none; }
+    .info-message { font-size: 1rem; color: var(--text-secondary); padding: 2rem; text-align: center; width: 100%; grid-column: 1 / -1; }
+    #loadingOverlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8);
+      z-index: 200; display: none; justify-content: center; align-items: center; backdrop-filter: blur(4px);
+    }
+    #loadingOverlay.active { display: flex; }
+    .loader {
+      width: 50px; height: 50px; border: 5px solid var(--border-color); border-top-color: var(--primary-color);
+      border-radius: 50%; animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); animation: fadeIn 0.3s ease; }
+    .modal.active { display: flex; justify-content: center; align-items: center; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .modal-content {
+      background-color: var(--card-background); margin: auto; padding: var(--gap);
+      width: 90%; max-width: 600px; border-radius: var(--radius); box-shadow: var(--shadow-lg);
+      display: flex; flex-direction: column;
+    }
+    .modal-header { font-size: 1.5rem; font-weight: 700; margin-bottom: var(--gap); padding-bottom: var(--gap); border-bottom: 1px solid var(--border-color); color: var(--text-primary); }
+    .modal-body { max-height: 50vh; overflow-y: auto; padding-right: 10px; }
+    .confirm-item {
+      display: grid; grid-template-columns: 64px 1fr auto auto;
+      gap: 1rem; align-items: center; padding: 1rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .confirm-item:last-child { border-bottom: none; }
+    .confirm-item__img { width: 64px; height: 64px; object-fit: cover; border-radius: 0.5rem; }
+    .confirm-item__info { display: flex; flex-direction: column; }
+    .confirm-item__name { font-weight: 500; color: var(--text-primary); }
+    .confirm-item__price { font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px; }
+    .confirm-item__qty { font-size: 1rem; color: var(--text-primary); text-align: right; }
+    .remove-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-secondary); transition: var(--transition); padding: 0.5rem; }
+    .remove-btn:hover { color: #ef4444; background-color: #fef2f2; border-radius: 50%; }
+    .modal-summary { padding-top: var(--gap); margin-top: var(--gap); border-top: 1px solid var(--border-color); }
+    .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; font-size: 1rem; }
+    .summary-row.total { font-size: 1.25rem; font-weight: 700; color: var(--primary-color); }
+    .modal-footer { margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem; }
+    .modal-footer button { padding: 0.75rem 1.5rem; border-radius: var(--radius); border: none; cursor: pointer; font-weight: 700; font-size: 1rem; transition: var(--transition); }
+    .btn-cancel { background-color: transparent; color: var(--text-secondary); border: 1px solid var(--border-color); }
+    .btn-cancel:hover { background-color: #f1f5f9; border-color: #cbd5e1; }
+    .btn-confirm { background-color: var(--primary-color); color: white; border: 1px solid var(--primary-color); }
+    .btn-confirm:hover { background-color: var(--primary-hover); border-color: var(--primary-hover); }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <img src="logo.jpg" alt="意念國際精品 Logo" class="logo"/>
+    <h2>意念國際精品 線上訂購系統</h2>
+    <form id="orderForm">
+      <div class="form-header">
+        <label for="customerName">訂購人 / 公司名稱</label>
+        <input id="customerName" type="text" required placeholder="請填寫訂購人姓名" />
+      </div>
+      <div class="form-body">
+        <div style="margin-bottom: var(--gap);">
+            <label>商品系列</label>
+            <div id="categoryContainer"></div>
+        </div>
+        <div id="itemsContainer"><div class="info-message">請先選擇一個商品系列</div></div>
+        <div style="margin-top: var(--gap);">
+            <label for="remarks">訂單備註 (選填)</label>
+            <textarea id="remarks" placeholder="如有特殊需求或指定到貨時間，請填寫於此"></textarea>
+        </div>
+      </div>
+      <div class="form-footer">
+        <button id="submitBtn" class="submit-btn" type="submit">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          <span>預覽訂單</span>
+        </button>
+      </div>
+    </form>
+  </div>
+  
+  <div id="loadingOverlay"><div class="loader"></div></div>
+
+  <div id="confirmModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">訂單預覽</div>
+      <div class="modal-body" id="confirmList"></div>
+      <div class="modal-summary" id="summaryContainer"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel">返回修改</button>
+        <button type="button" class="btn-confirm">確認送出</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- 【請務必修改】將您在第二步中，重新部署後得到的全新 Web App URL 貼在此處 ---
+    const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxQKZlLOiaEYerS5jqkESPhtl5FJo5mrGqoyzABkR1lNCO8aoatXjIqiDK3JvaUoKlb/exec";
+
+    const customerNameInput = document.getElementById('customerName');
+    const categoryContainer = document.getElementById('categoryContainer');
+    const itemsContainer = document.getElementById('itemsContainer');
+    const orderForm = document.getElementById('orderForm');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const confirmModal = document.getElementById('confirmModal');
+    const remarksInput = document.getElementById('remarks');
+
+    const pending = {};
+    let allItemsFlat = [];
+    let categorizedItems = {};
+    
+    const showLoader = () => loadingOverlay.classList.add('active');
+    const hideLoader = () => loadingOverlay.classList.remove('active');
+
+    async function initializeApp() {
+        showLoader();
+        try {
+            const response = await fetch(`${GAS_API_URL}?action=getInitialData`);
+            if (!response.ok) throw new Error(`網路回應錯誤 (HTTP ${response.status}): ${response.statusText}`);
+            const data = await response.json();
+            if (data.error) throw new Error(`後端 API 錯誤: ${data.error}`);
+
+            categorizedItems = data.categorizedItems || {};
+            allItemsFlat = Object.values(categorizedItems).flat();
+            renderCategories();
+        } catch (e) {
+            alert('系統初始化失敗，請重新整理頁面：\n' + e.message);
+            itemsContainer.innerHTML = '<div class="info-message">資料載入失敗，請確認 API URL 是否正確，或檢查後端部署設定。</div>';
+        } finally {
+            hideLoader();
+        }
+    }
+    
+    function renderCategories() {
+        categoryContainer.innerHTML = '';
+        const categories = Object.keys(categorizedItems).sort();
+        if (categories.length === 0) {
+            categoryContainer.innerHTML = '<p class="info-message" style="padding: 0; text-align: left;">目前沒有可訂購的商品系列</p>';
+            return;
+        }
+        categories.forEach(category => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'category-btn';
+            btn.textContent = category;
+            btn.dataset.category = category;
+            categoryContainer.appendChild(btn);
+        });
+    }
+    
+    function renderItems(category) {
+        itemsContainer.innerHTML = '';
+        const itemsToRender = categorizedItems[category] || [];
+        if (itemsToRender.length === 0) {
+            itemsContainer.innerHTML = '<div class="info-message">此系列下目前沒有商品</div>';
+            return;
+        }
+        itemsToRender.forEach(o => {
+            const itemName = o.item || '品項名稱未知';
+            const itemPrice = o.price || 0;
+            const itemUnit = o.unit || '';
+            const imageUrl = o.imageUrl || 'https://via.placeholder.com/300?text=No+Image';
+            const div = document.createElement('div');
+            div.className = 'item-option';
+            const exist = pending[itemName] || { qty: 0 };
+            const priceDisplay = `<span class="item-price">NT$ ${itemPrice}</span>`;
+            const unitText = itemUnit ? `<span class="item-unit"> / ${itemUnit}</span>` : '';
+            div.innerHTML = `
+            <div class="item-image-container"><img src="${imageUrl}" alt="${itemName}" class="item-image" loading="lazy"></div>
+            <div class="item-details">
+                <div class="item-info">
+                  <div class="item-label">${itemName}${unitText}</div>
+                  ${priceDisplay}
+                </div>
+                <div class="qty-control">
+                    <button type="button" class="qty-minus" aria-label="減少數量">−</button>
+                    <input type="number" min="0" value="${exist.qty}" readonly>
+                    <button type="button" class="qty-plus" aria-label="增加數量">＋</button>
+                </div>
+            </div>`;
+            const qtyIn = div.querySelector('input[type="number"]');
+            const btnM = div.querySelector('.qty-minus');
+            const btnP = div.querySelector('.qty-plus');
+            const update = (v) => {
+                v = Math.max(0, parseInt(v, 10) || 0);
+                qtyIn.value = v;
+                if (v > 0) { pending[itemName] = { item: itemName, unit: itemUnit, price: itemPrice, qty: v }; } 
+                else { delete pending[itemName]; }
+            };
+            btnP.addEventListener('click', e => { e.stopPropagation(); update(qtyIn.value * 1 + 1); });
+            btnM.addEventListener('click', e => { e.stopPropagation(); update(qtyIn.value * 1 - 1); });
+            div.addEventListener('click', e => { if (e.target.closest('button')) return; update(qtyIn.value * 1 + 1); });
+            itemsContainer.appendChild(div);
+        });
+    }
+
+    function showConfirmModal(arr) {
+        const listContainer = document.getElementById('confirmList');
+        const summaryContainer = document.getElementById('summaryContainer');
+        listContainer.innerHTML = '';
+        summaryContainer.innerHTML = '';
+        let subtotal = 0;
+        if (arr.length > 0) {
+            arr.forEach(order => {
+                const fullItem = allItemsFlat.find(item => item.item === order.item);
+                const imageUrl = fullItem ? fullItem.imageUrl : 'https://via.placeholder.com/300?text=No+Image';
+                subtotal += (order.price || 0) * order.qty;
+                const row = document.createElement('div');
+                row.className = 'confirm-item';
+                row.innerHTML = `
+                    <img src="${imageUrl}" alt="${order.item}" class="confirm-item__img">
+                    <div class="confirm-item__info">
+                        <span class="confirm-item__name">${order.item}</span>
+                        <span class="confirm-item__price">NT$ ${order.price}</span>
+                    </div>
+                    <span class="confirm-item__qty">x ${order.qty}</span>
+                    <button type="button" class="remove-btn" data-item-name="${order.item}" aria-label="移除此項商品">🗑️</button>
+                `;
+                listContainer.appendChild(row);
+            });
+            const shippingFee = 0;
+            const total = subtotal + shippingFee;
+            summaryContainer.innerHTML = `
+                <div class="summary-row"><span>商品小計</span><span>NT$ ${subtotal}</span></div>
+                <div class="summary-row"><span>運費</span><span>${shippingFee === 0 ? '免運費' : `NT$ ${shippingFee}`}</span></div>
+                <div class="summary-row total"><span>訂單總金額</span><span>NT$ ${total}</span></div>
+            `;
+        } else {
+            listContainer.innerHTML = '<div>您的訂單購物車是空的。</div>';
+        }
+        confirmModal.classList.add('active');
+        document.querySelector('.btn-confirm').disabled = arr.length === 0;
+    }
+
+    document.addEventListener('DOMContentLoaded', initializeApp);
+    categoryContainer.addEventListener('click', e => {
+        if (e.target.matches('.category-btn')) {
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+            renderItems(e.target.dataset.category);
+        }
+    });
+    orderForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const name = customerNameInput.value.trim();
+        if (!name) { alert('請填寫訂購人或公司名稱！'); customerNameInput.focus(); return; }
+        const arr = Object.values(pending);
+        if (arr.length === 0) { alert('請至少選擇一項商品！'); return; }
+        showConfirmModal(arr);
+    });
+
+    confirmModal.addEventListener('click', async (e) => {
+        if (e.target.matches('.btn-cancel')) {
+            confirmModal.classList.remove('active');
+        } else if (e.target.matches('.remove-btn, .remove-btn *')) {
+            const button = e.target.closest('.remove-btn');
+            const itemName = button.dataset.itemName;
+            delete pending[itemName];
+            const activeCategoryBtn = document.querySelector('.category-btn.active');
+            if (activeCategoryBtn) { renderItems(activeCategoryBtn.dataset.category); }
+            showConfirmModal(Object.values(pending));
+        } else if (e.target.matches('.btn-confirm')) {
+            const btn = e.target;
+            btn.disabled = true;
+            btn.textContent = '訂單傳送中…';
+            showLoader();
+            try {
+                const payload = {
+                    action: 'submitOrder',
+                    data: { name: customerNameInput.value.trim(), phone: '', remarks: remarksInput.value.trim(), orders: Object.values(pending) }
+                };
+                
+                const response = await fetch(GAS_API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload),
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    redirect: 'follow'
+                });
+
+                const resultText = await response.text();
+                let result;
+                try { result = JSON.parse(resultText); } 
+                catch(err) { result = { success: true }; }
+
+                if (!result.success) throw new Error(result.error || '未知的後端錯誤');
+                
+                alert('訂單已成功送出！感謝您的訂購。');
+                orderForm.reset();
+                for (let k in pending) delete pending[k];
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                itemsContainer.innerHTML = '<div class="info-message">請先選擇一個商品系列</div>';
+                confirmModal.classList.remove('active');
+            } catch (err) {
+                alert('訂單送出失敗：\n' + err.message);
+            } finally {
+                btn.textContent = '確認送出';
+                btn.disabled = false;
+                hideLoader();
+            }
+        }
+    });
+  </script>
+</body>
+</html>
