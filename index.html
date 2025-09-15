@@ -6,91 +6,44 @@
   <title>意念國際精品 線上訂購系統</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet"/>
   <style>
-    /* --- 1. 核心設計系統 (Design System) --- */
+    /* --- 1. 核心設計系統 --- */
     :root {
-      --primary-color: #c0a062;
-      --primary-hover: #a18041;
-      --background-color: #f8f9fa;
-      --card-background: #ffffff;
-      --text-primary: #1e293b;
-      --text-secondary: #64748b;
-      --border-color: #e2e8f0;
-      --danger-color: #ef4444;
-      --font-family: 'Noto Sans TC', sans-serif;
+      --primary-color: #c0a062; --primary-hover: #a18041; --background-color: #f8f9fa;
+      --card-background: #ffffff; --text-primary: #1e293b; --text-secondary: #64748b;
+      --border-color: #e2e8f0; --danger-color: #ef4444; --font-family: 'Noto Sans TC', sans-serif;
       --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
       --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
-      --radius: 0.5rem;
-      --gap: 1.25rem;
-      --transition: all 0.2s ease-in-out;
+      --radius: 0.5rem; --gap: 1.25rem; --transition: all 0.3s ease-in-out;
     }
-
-    /* --- 2. 基礎與重設 (Reset & Base) --- */
+    /* --- 2. 基礎與重設 --- */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { font-family: var(--font-family); color: var(--text-primary); scroll-behavior: smooth; }
     body { background-color: var(--background-color); line-height: 1.6; }
     img { max-width: 100%; display: block; }
     button, input, textarea { font-family: inherit; font-size: 1rem; }
-
-    /* --- 3. 主要佈局 (Main Layout) --- */
+    /* --- 3. 主要佈局 --- */
     .container { width: 100%; max-width: 1024px; margin: 0 auto; padding: var(--gap); }
-    .card {
-      background: var(--card-background);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-lg);
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      padding: calc(var(--gap) * 1.5);
-      border: 1px solid var(--border-color);
-      min-height: calc(100vh - 2 * var(--gap));
-    }
-    .logo { display: block; margin: 0 auto var(--gap); max-width: 220px; flex-shrink: 0; }
+    .card { background: var(--card-background); border-radius: var(--radius); box-shadow: var(--shadow-lg); width: 100%; display: flex; flex-direction: column; padding: calc(var(--gap) * 1.5); border: 1px solid var(--border-color); min-height: calc(100vh - 2 * var(--gap)); }
+    .logo { display: block; margin: 0 auto var(--gap); max-width: 150px; flex-shrink: 0; }
     h2 { text-align: center; color: var(--text-primary); font-size: 1.75rem; margin-bottom: var(--gap); font-weight: 700; flex-shrink: 0; }
-    
-    /* --- 4. 表單結構與元件 (Form Structure & Components) --- */
+    /* --- 4. 表單結構 --- */
     form { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; }
     .form-header, .form-footer { flex-shrink: 0; }
     .form-body { flex-grow: 1; overflow-y: auto; padding: 0.5rem; margin: 0 -0.5rem; }
     .form-group { margin-bottom: var(--gap); }
     .form-footer { margin-top: auto; padding-top: var(--gap); border-top: 1px solid var(--border-color); }
     label { font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 0.5rem; display: block; }
-    input[type="text"], input[type="tel"], textarea {
-      width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border-color);
-      border-radius: var(--radius); transition: var(--transition); background-color: #f8fafc;
-    }
-    input[type="text"]:focus, input[type="tel"]:focus, textarea:focus {
-      border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(192, 160, 98, 0.2); outline: none; background-color: white;
-    }
+    input[type="text"], input[type="tel"], textarea { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border-color); border-radius: var(--radius); transition: var(--transition); background-color: #f8fafc; }
+    input[type="text"]:focus, input[type="tel"]:focus, textarea:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(192, 160, 98, 0.2); outline: none; background-color: white; }
     textarea { resize: vertical; min-height: 70px; }
-
-    /* --- 5. 元件美化 (Component Styling) --- */
+    /* --- 5. 元件美化 --- */
     #categoryContainer { display: flex; flex-wrap: wrap; gap: 0.75rem; padding-top: 0.5rem; }
-    .category-btn {
-      padding: 0.6rem 1.2rem; border: 1px solid var(--border-color); border-radius: 2rem;
-      background-color: var(--card-background); color: var(--text-secondary);
-      font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: var(--transition);
-    }
+    .category-btn { padding: 0.6rem 1.2rem; border: 1px solid var(--border-color); border-radius: 2rem; background-color: var(--card-background); color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: var(--transition); }
     .category-btn:hover { background-color: #f1f5f9; border-color: #cbd5e1; }
     .category-btn.active { background-color: var(--primary-color); color: white; border-color: var(--primary-color); font-weight: 700; }
-
-    #itemsContainer {
-      display: flex;
-      overflow-x: auto;
-      flex-wrap: nowrap;
-      gap: var(--gap);
-      padding: 1rem 0;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
+    #itemsContainer { display: flex; overflow-x: auto; flex-wrap: nowrap; gap: var(--gap); padding: 1rem 0; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
     #itemsContainer::-webkit-scrollbar { display: none; }
-    
-    .item-option {
-      flex-shrink: 0;
-      width: 240px;
-      background: var(--card-background); border-radius: var(--radius); box-shadow: var(--shadow-md);
-      display: flex; flex-direction: column; transition: var(--transition);
-      overflow: hidden; border: 1px solid var(--border-color);
-    }
+    .item-option { flex-shrink: 0; width: 240px; background: var(--card-background); border-radius: var(--radius); box-shadow: var(--shadow-md); display: flex; flex-direction: column; transition: var(--transition); overflow: hidden; border: 1px solid var(--border-color); }
     .item-option:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
     .item-image-container { width: 100%; padding-top: 100%; position: relative; background-color: #f1f5f9; }
     .item-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -98,54 +51,46 @@
     .item-info { flex-grow: 1; margin-bottom: 1rem; }
     .item-label { font-size: 1.05rem; font-weight: 500; line-height: 1.4; color: var(--text-primary); }
     .item-price { font-size: 1rem; color: var(--primary-color); font-weight: 700; display: block; margin-top: 0.5rem; }
-    
     .qty-control { display: flex; align-items: center; justify-content: space-between; }
     .qty-control input[type="number"] { width: 60px; text-align: center; padding: 0.25rem; font-size: 1rem; font-weight: 700; border: none; background: transparent; pointer-events: none; }
-    .qty-control button {
-      background: var(--border-color); color: var(--text-secondary); border: none; border-radius: 50%;
-      width: 32px; height: 32px; font-size: 1.5rem; font-weight: 400; cursor: pointer;
-      transition: var(--transition); display: flex; align-items: center; justify-content: center; line-height: 1;
-    }
+    .qty-control button { background: var(--border-color); color: var(--text-secondary); border: none; border-radius: 50%; width: 32px; height: 32px; font-size: 1.5rem; font-weight: 400; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; line-height: 1; }
     .qty-control button:hover { background: var(--primary-color); color: white; }
-    
-    .submit-btn {
-      background: var(--primary-color); color: white; border: none; width: 100%;
-      padding: 1rem; font-size: 1.1rem; font-weight: 700; border-radius: var(--radius);
-      cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-    }
+    .submit-btn { background: var(--primary-color); color: white; border: none; width: 100%; padding: 1rem; font-size: 1.1rem; font-weight: 700; border-radius: var(--radius); cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
     .submit-btn:hover { background: var(--primary-hover); box-shadow: var(--shadow-md); }
-    
     .info-message { font-size: 1rem; color: var(--text-secondary); padding: 2rem; text-align: center; width: 100%; flex-shrink: 0; }
-    
-    /* --- 6. 覆蓋層與彈出視窗 (Overlays & Modals) --- */
+    /* --- 6. 覆蓋層與彈出視窗 --- */
     #loadingOverlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8);
-      z-index: 200; display: none; justify-content: center; align-items: center; backdrop-filter: blur(4px);
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background-color: var(--background-color);
+      z-index: 200;
+      display: flex;
+      justify-content: center; align-items: center;
+      transition: opacity 0.5s ease-out;
+      opacity: 1;
     }
-    #loadingOverlay.active { display: flex; }
-    .loader {
-      width: 50px; height: 50px; border: 5px solid var(--border-color); border-top-color: var(--primary-color);
-      border-radius: 50%; animation: spin 1s linear infinite;
+    #loadingOverlay.hidden {
+        opacity: 0;
+        pointer-events: none;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    
+    .logo-loader {
+      max-width: 250px;
+      animation: pop-in 1s ease-out forwards, pulse 2.5s ease-in-out infinite 1s;
+    }
+    @keyframes pop-in {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
     .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); animation: fadeIn 0.3s ease; }
     .modal.active { display: flex; justify-content: center; align-items: center; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    
-    .modal-content {
-      background-color: var(--card-background); margin: auto; padding: var(--gap);
-      width: 90%; max-width: 600px; border-radius: var(--radius); box-shadow: var(--shadow-lg);
-      display: flex; flex-direction: column;
-    }
+    .modal-content { background-color: var(--card-background); margin: auto; padding: var(--gap); width: 90%; max-width: 600px; border-radius: var(--radius); box-shadow: var(--shadow-lg); display: flex; flex-direction: column; }
     .modal-header { font-size: 1.5rem; font-weight: 700; margin-bottom: var(--gap); padding-bottom: var(--gap); border-bottom: 1px solid var(--border-color); color: var(--text-primary); }
     .modal-body { max-height: 50vh; overflow-y: auto; padding-right: 10px; }
-    
-    .confirm-item {
-      display: grid; grid-template-columns: 64px 1fr auto auto;
-      gap: 1rem; align-items: center; padding: 1rem 0;
-      border-bottom: 1px solid var(--border-color);
-    }
+    .confirm-item { display: grid; grid-template-columns: 64px 1fr auto auto; gap: 1rem; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--border-color); }
     .confirm-item:last-child { border-bottom: none; }
     .confirm-item__img { width: 64px; height: 64px; object-fit: cover; border-radius: 0.5rem; }
     .confirm-item__info { display: flex; flex-direction: column; }
@@ -154,19 +99,16 @@
     .confirm-item__qty { font-size: 1rem; color: var(--text-primary); text-align: right; }
     .remove-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-secondary); transition: var(--transition); padding: 0.5rem; }
     .remove-btn:hover { color: var(--danger-color); background-color: #fef2f2; border-radius: 50%; }
-    
     .modal-summary { padding-top: var(--gap); margin-top: var(--gap); border-top: 1px solid var(--border-color); }
     .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; font-size: 1rem; }
     .summary-row.total { font-size: 1.25rem; font-weight: 700; color: var(--primary-color); }
-    
     .modal-footer { margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem; }
     .modal-footer button { padding: 0.75rem 1.5rem; border-radius: var(--radius); border: none; cursor: pointer; font-weight: 700; font-size: 1rem; transition: var(--transition); }
     .btn-cancel { background-color: transparent; color: var(--text-secondary); border: 1px solid var(--border-color); }
     .btn-cancel:hover { background-color: #f1f5f9; border-color: #cbd5e1; }
     .btn-confirm { background-color: var(--primary-color); color: white; border: 1px solid var(--primary-color); }
     .btn-confirm:hover { background-color: var(--primary-hover); border-color: var(--primary-hover); }
-
-    /* --- 7. RWD: 響應式網頁設計 (Mobile-first adjustments) --- */
+    /* --- 7. RWD --- */
     @media (max-width: 768px) {
       :root { --gap: 0.75rem; }
       body { padding: 0; }
@@ -182,18 +124,18 @@
 </head>
 <body>
   <div class="container">
-    <div class="card">
+    <div class="card" style="visibility: hidden;">
       <img src="logo.jpg" alt="意念國際精品 Logo" class="logo"/>
       <h2>線上訂購系統</h2>
       <form id="orderForm">
         <div class="form-header">
           <div class="form-group">
             <label for="customerName">訂購人 / 公司名稱</label>
-            <input id="customerName" type="text" required placeholder="請填寫您的大名或公司寶號" />
+            <input id="customerName" type="text" required placeholder="請填寫訂購人名稱" />
           </div>
           <div class="form-group">
             <label for="customerPhone">聯絡電話</label>
-            <input id="customerPhone" type="tel" placeholder="請填寫您的聯絡電話 (選填)" />
+            <input id="customerPhone" type="tel" placeholder="請填寫您的聯絡電話" />
           </div>
         </div>
         <div class="form-body">
@@ -203,7 +145,7 @@
           </div>
           <div id="itemsContainer"><div class="info-message">載入商品中...</div></div>
           <div class="form-group">
-            <label for="remarks">訂單備註 (選填)</label>
+            <label for="remarks">訂單備註</label>
             <textarea id="remarks" placeholder="如有特殊需求或指定到貨時間，請填寫於此"></textarea>
           </div>
         </div>
@@ -217,7 +159,9 @@
     </div>
   </div>
   
-  <div id="loadingOverlay"><div class="loader"></div></div>
+  <div id="loadingOverlay">
+    <img src="logo.jpg" alt="Loading Logo" class="logo-loader"/>
+  </div>
 
   <div id="confirmModal" class="modal">
     <div class="modal-content">
@@ -233,9 +177,10 @@
 
   <script>
     // --- 【非常重要！請務必替換成您自己的新部署網址】 ---
-    const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxsAKpACMQChMidFUn85JalHxxo4rmJAKA36GCg2l_Wv09d-Rg2VO_rf846PLzYdLNM/exec";
+    const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxR7hJ2b5-EMgp6sD3rkK3aH6xquC7cd87u-5fXEdJGnn34OqEMw8nHjeExBgWut3Jm/exec";
 
     // --- DOM Elements ---
+    const mainCard = document.querySelector('.card');
     const customerNameInput = document.getElementById('customerName');
     const customerPhoneInput = document.getElementById('customerPhone');
     const categoryContainer = document.getElementById('categoryContainer');
@@ -249,7 +194,17 @@
     let state = { pending: {}, categorizedItems: {} };
     
     // --- Core Functions ---
-    const showLoader = (show) => loadingOverlay.classList.toggle('active', show);
+    const showLoader = (show) => {
+        if (show) {
+            mainCard.style.visibility = 'hidden';
+            loadingOverlay.classList.remove('hidden');
+        } else {
+            setTimeout(() => {
+                loadingOverlay.classList.add('hidden');
+                mainCard.style.visibility = 'visible';
+            }, 500);
+        }
+    };
 
     function jsonpRequest(url, callback) {
       const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
@@ -276,18 +231,17 @@
 
     // --- App Logic ---
     function initializeApp() {
-      showLoader(true);
       const url = `${GAS_API_URL}?action=getInitialData`;
       jsonpRequest(url, (err, data) => {
-        showLoader(false);
         if (err || !data.success) {
           const error = err || new Error(data.error);
           handleError("系統初始化", error);
           itemsContainer.innerHTML = `<div class="info-message">資料載入失敗：${error.message}</div>`;
-          return;
+        } else {
+            state.categorizedItems = data.categorizedItems || {};
+            renderCategories();
         }
-        state.categorizedItems = data.categorizedItems || {};
-        renderCategories();
+        showLoader(false);
       });
     }
 
@@ -350,24 +304,21 @@
     }
 
     function submitOrder() {
+      const simpleLoader = document.createElement('div');
+      simpleLoader.style.cssText = "position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); z-index: 300; display: flex; justify-content: center; align-items: center;";
+      simpleLoader.innerHTML = '<div class="loader" style="width: 40px; height: 40px; border-width: 4px;"></div>';
+      document.body.appendChild(simpleLoader);
+
       const btn = document.querySelector('.btn-confirm');
       btn.disabled = true;
       btn.textContent = '訂單傳送中…';
-      showLoader(true);
-
-      const payload = {
-        data: {
-          name: customerNameInput.value.trim(),
-          phone: customerPhoneInput.value.trim(),
-          remarks: remarksInput.value.trim(),
-          orders: Object.values(state.pending)
-        }
-      };
-
-      const url = `${GAS_API_URL}?action=submitOrder&payload=${encodeURIComponent(JSON.stringify(payload))}`;
       
+      const payload = {
+        data: { name: customerNameInput.value.trim(), phone: customerPhoneInput.value.trim(), remarks: remarksInput.value.trim(), orders: Object.values(state.pending) }
+      };
+      const url = `${GAS_API_URL}?action=submitOrder&payload=${encodeURIComponent(JSON.stringify(payload))}`;
       jsonpRequest(url, (err, result) => {
-        showLoader(false);
+        document.body.removeChild(simpleLoader);
         btn.disabled = false;
         btn.textContent = '確認送出';
         if (err || !result.success) {
@@ -386,50 +337,10 @@
     
     // --- Event Listeners and Modal Logic ---
     document.addEventListener('DOMContentLoaded', initializeApp);
-    categoryContainer.addEventListener('click', e => {
-      if (e.target.matches('.category-btn')) {
-        document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
-        e.target.classList.add('active');
-        renderItems(e.target.dataset.category);
-      }
-    });
-    orderForm.addEventListener('submit', e => {
-      e.preventDefault();
-      if (!customerNameInput.value.trim()) { alert('請填寫訂購人或公司名稱！'); return; }
-      if (Object.keys(state.pending).length === 0) { alert('請至少選擇一項商品！'); return; }
-      showConfirmModal();
-    });
-    function showConfirmModal() { 
-        const orders = Object.values(state.pending);
-        const listContainer = document.getElementById('confirmList');
-        const summaryContainer = document.getElementById('summaryContainer');
-        listContainer.innerHTML = ''; summaryContainer.innerHTML = '';
-        if (orders.length > 0) {
-            let subtotal = 0;
-            orders.forEach(order => {
-                subtotal += (order.price || 0) * order.qty;
-                listContainer.innerHTML += `<div class="confirm-item"><img src="${order.imageUrl || 'https://via.placeholder.com/300?text=No+Image'}" alt="${order.item}" class="confirm-item__img"><div class="confirm-item__info"><span class="confirm-item__name">${order.item}</span><span class="confirm-item__price">NT$ ${order.price}</span></div><span class="confirm-item__qty">x ${order.qty}</span><button type="button" class="remove-btn" data-item-name="${order.item}" aria-label="移除此項商品">🗑️</button></div>`;
-            });
-            summaryContainer.innerHTML = `<div class="summary-row"><span>商品小計</span><span>NT$ ${subtotal}</span></div><div class="summary-row total"><span>訂單總金額</span><span>NT$ ${subtotal}</span></div>`;
-        } else {
-            listContainer.innerHTML = '<div>您的訂單是空的。</div>';
-        }
-        confirmModal.classList.add('active');
-        document.querySelector('.btn-confirm').disabled = orders.length === 0;
-    }
-    confirmModal.addEventListener('click', e => {
-      if (e.target.matches('.btn-cancel')) {
-        confirmModal.classList.remove('active');
-      } else if (e.target.matches('.remove-btn')) {
-        const itemName = e.target.dataset.itemName;
-        delete state.pending[itemName];
-        const activeCategory = document.querySelector('.category-btn.active')?.dataset.category;
-        if (activeCategory) renderItems(activeCategory);
-        showConfirmModal();
-      } else if (e.target.matches('.btn-confirm')) {
-        submitOrder();
-      }
-    });
+    categoryContainer.addEventListener('click', e => { if (e.target.matches('.category-btn')) { document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active')); e.target.classList.add('active'); renderItems(e.target.dataset.category); } });
+    orderForm.addEventListener('submit', e => { e.preventDefault(); if (!customerNameInput.value.trim()) { alert('請填寫訂購人或公司名稱！'); return; } if (Object.keys(state.pending).length === 0) { alert('請至少選擇一項商品！'); return; } showConfirmModal(); });
+    function showConfirmModal() { const orders = Object.values(state.pending); const listContainer = document.getElementById('confirmList'); const summaryContainer = document.getElementById('summaryContainer'); listContainer.innerHTML = ''; summaryContainer.innerHTML = ''; if (orders.length > 0) { let subtotal = 0; orders.forEach(order => { subtotal += (order.price || 0) * order.qty; listContainer.innerHTML += `<div class="confirm-item"><img src="${order.imageUrl || 'https://via.placeholder.com/300?text=No+Image'}" alt="${order.item}" class="confirm-item__img"><div class="confirm-item__info"><span class="confirm-item__name">${order.item}</span><span class="confirm-item__price">NT$ ${order.price}</span></div><span class="confirm-item__qty">x ${order.qty}</span><button type="button" class="remove-btn" data-item-name="${order.item}" aria-label="移除此項商品">🗑️</button></div>`; }); summaryContainer.innerHTML = `<div class="summary-row"><span>商品小計</span><span>NT$ ${subtotal}</span></div><div class="summary-row total"><span>訂單總金額</span><span>NT$ ${subtotal}</span></div>`; } else { listContainer.innerHTML = '<div>您的訂單是空的。</div>'; } confirmModal.classList.add('active'); document.querySelector('.btn-confirm').disabled = orders.length === 0; }
+    confirmModal.addEventListener('click', e => { if (e.target.matches('.btn-cancel')) { confirmModal.classList.remove('active'); } else if (e.target.matches('.remove-btn')) { const itemName = e.target.dataset.itemName; delete state.pending[itemName]; const activeCategory = document.querySelector('.category-btn.active')?.dataset.category; if (activeCategory) renderItems(activeCategory); showConfirmModal(); } else if (e.target.matches('.btn-confirm')) { submitOrder(); } });
   </script>
 </body>
 </html>
