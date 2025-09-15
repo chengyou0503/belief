@@ -10,10 +10,11 @@
     :root {
       --primary-color: #c0a062; --primary-hover: #a18041; --background-color: #f8f9fa;
       --card-background: #ffffff; --text-primary: #1e293b; --text-secondary: #64748b;
-      --border-color: #e2e8f0; --danger-color: #ef4444; --font-family: 'Noto Sans TC', sans-serif;
+      --border-color: #e2e8f0; --danger-color: #ef4444; --success-color: #10b981;
+      --font-family: 'Noto Sans TC', sans-serif;
       --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
       --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
-      --radius: 0.5rem; --gap: 1.25rem; --transition: all 0.3s ease-in-out;
+      --radius: 0.5rem; --gap: 1.25rem; --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
     /* --- 2. 基礎與重設 --- */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -59,36 +60,16 @@
     .submit-btn:hover { background: var(--primary-hover); box-shadow: var(--shadow-md); }
     .info-message { font-size: 1rem; color: var(--text-secondary); padding: 2rem; text-align: center; width: 100%; flex-shrink: 0; }
     /* --- 6. 覆蓋層與彈出視窗 --- */
-    #loadingOverlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background-color: var(--background-color);
-      z-index: 200;
-      display: flex;
-      justify-content: center; align-items: center;
-      transition: opacity 0.5s ease-out;
-      opacity: 1;
-    }
-    #loadingOverlay.hidden {
-        opacity: 0;
-        pointer-events: none;
-    }
-    .logo-loader {
-      max-width: 250px;
-      animation: pop-in 1s ease-out forwards, pulse 2.5s ease-in-out infinite 1s;
-    }
-    @keyframes pop-in {
-      from { transform: scale(0.5); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
+    #loadingOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--background-color); z-index: 200; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease-out; opacity: 1; }
+    #loadingOverlay.hidden { opacity: 0; pointer-events: none; }
+    .logo-loader { max-width: 250px; animation: pop-in 1s ease-out forwards, pulse 2.5s ease-in-out infinite 1s; }
+    @keyframes pop-in { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
     .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); animation: fadeIn 0.3s ease; }
     .modal.active { display: flex; justify-content: center; align-items: center; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     .modal-content { background-color: var(--card-background); margin: auto; padding: var(--gap); width: 90%; max-width: 600px; border-radius: var(--radius); box-shadow: var(--shadow-lg); display: flex; flex-direction: column; }
-    .modal-header { font-size: 1.5rem; font-weight: 700; margin-bottom: var(--gap); padding-bottom: var(--gap); border-bottom: 1px solid var(--border-color); color: var(--text-primary); }
+    .modal-header { font-size: 1.5rem; font-weight: 700; margin-bottom: var(--gap); padding-bottom: var(--gap); border-bottom: 1px solid var(--border-color); }
     .modal-body { max-height: 50vh; overflow-y: auto; padding-right: 10px; }
     .confirm-item { display: grid; grid-template-columns: 64px 1fr auto auto; gap: 1rem; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--border-color); }
     .confirm-item:last-child { border-bottom: none; }
@@ -106,8 +87,70 @@
     .modal-footer button { padding: 0.75rem 1.5rem; border-radius: var(--radius); border: none; cursor: pointer; font-weight: 700; font-size: 1rem; transition: var(--transition); }
     .btn-cancel { background-color: transparent; color: var(--text-secondary); border: 1px solid var(--border-color); }
     .btn-cancel:hover { background-color: #f1f5f9; border-color: #cbd5e1; }
-    .btn-confirm { background-color: var(--primary-color); color: white; border: 1px solid var(--primary-color); }
-    .btn-confirm:hover { background-color: var(--primary-hover); border-color: var(--primary-hover); }
+    
+    /* 【CSS 修正】送出訂單按鈕動畫 */
+    .btn-confirm {
+        position: relative;
+        width: 130px;
+        height: 48px;
+        background-color: var(--primary-color);
+        color: white;
+        border: 1px solid var(--primary-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn-confirm > span,
+    .btn-confirm > div {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+    }
+    .btn-text, .success-text {
+        white-space: nowrap; /* 核心修正：防止文字換行 */
+    }
+    .submit-animation-container {
+        opacity: 0;
+        width: 24px;
+        height: 24px;
+    }
+    .spinner {
+        width: 100%;
+        height: 100%;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+    .checkmark {
+        stroke-width: 4;
+        stroke: white;
+        stroke-dasharray: 48;
+        stroke-dashoffset: 48;
+    }
+    .success-text {
+        opacity: 0;
+    }
+
+    /* 狀態控制 */
+    .btn-confirm.btn--loading { width: 48px; border-radius: 50%; }
+    .btn-confirm.btn--loading .btn-text { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+    .btn-confirm.btn--loading .submit-animation-container,
+    .btn-confirm.btn--loading .spinner { opacity: 1; }
+    
+    .btn-confirm.btn--success { width: 180px; border-radius: var(--radius); background-color: var(--primary-color); border-color: var(--primary-color); }
+    .btn-confirm.btn--success .btn-text { opacity: 0; }
+    .btn-confirm.btn--success .submit-animation-container { opacity: 1; }
+    .btn-confirm.btn--success .spinner { opacity: 0; }
+    .btn-confirm.btn--success .checkmark { animation: draw-check 0.4s ease-out forwards 0.1s; }
+    .btn-confirm.btn--success .success-text { animation: fade-in-text 0.4s ease-out forwards 0.3s; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes draw-check { to { stroke-dashoffset: 0; } }
+    @keyframes fade-in-text { to { opacity: 1; } }
+
     /* --- 7. RWD --- */
     @media (max-width: 768px) {
       :root { --gap: 0.75rem; }
@@ -119,6 +162,9 @@
       .modal-content { width: 95%; margin: auto; }
       .modal-footer { flex-direction: column-reverse; }
       .modal-footer button { width: 100%; }
+      .btn-confirm { width: 100%; height: 52px; }
+      .btn-confirm.btn--loading { width: 52px; }
+      .btn-confirm.btn--success { width: 100%; }
     }
   </style>
 </head>
@@ -130,7 +176,7 @@
       <form id="orderForm">
         <div class="form-header">
           <div class="form-group">
-            <label for="customerName">訂購人 / 公司名稱</label>
+            <label for="customerName">訂購人</label>
             <input id="customerName" type="text" required placeholder="請填寫訂購人名稱" />
           </div>
           <div class="form-group">
@@ -151,8 +197,10 @@
         </div>
         <div class="form-footer">
           <button id="submitBtn" class="submit-btn" type="submit">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-            <span>預覽訂單</span>
+            <span class="btn-text">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+              <span>預覽訂單</span>
+            </span>
           </button>
         </div>
       </form>
@@ -170,14 +218,23 @@
       <div class="modal-summary" id="summaryContainer"></div>
       <div class="modal-footer">
         <button type="button" class="btn-cancel">返回修改</button>
-        <button type="button" class="btn-confirm">確認送出</button>
+        <button type="button" class="btn-confirm">
+            <span class="btn-text">確認送出</span>
+            <div class="submit-animation-container">
+                <div class="spinner"></div>
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+            </div>
+            <span class="success-text">訂單已送出！</span>
+        </button>
       </div>
     </div>
   </div>
 
   <script>
     // --- 【非常重要！請務必替換成您自己的新部署網址】 ---
-    const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxR7hJ2b5-EMgp6sD3rkK3aH6xquC7cd87u-5fXEdJGnn34OqEMw8nHjeExBgWut3Jm/exec";
+    const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxUizDaWUdLOciFsmIGDg6RgpJmNAnXX8_2o5q2S6IsV4VroFoZuBLY0bJtIvMZnDO2/exec";
 
     // --- DOM Elements ---
     const mainCard = document.querySelector('.card');
@@ -226,7 +283,9 @@
     function handleError(context, error) {
       console.error(`在 ${context} 過程中發生錯誤:`, error);
       alert(`在 ${context} 過程中發生錯誤。\n\n錯誤訊息: ${error.message}\n\n請檢查 GAS URL 是否正確並重新整理。`);
-      showLoader(false);
+      if (!loadingOverlay.classList.contains('hidden')) {
+        showLoader(false);
+      }
     }
 
     // --- App Logic ---
@@ -304,43 +363,64 @@
     }
 
     function submitOrder() {
-      const simpleLoader = document.createElement('div');
-      simpleLoader.style.cssText = "position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); z-index: 300; display: flex; justify-content: center; align-items: center;";
-      simpleLoader.innerHTML = '<div class="loader" style="width: 40px; height: 40px; border-width: 4px;"></div>';
-      document.body.appendChild(simpleLoader);
-
       const btn = document.querySelector('.btn-confirm');
+      const btnCancel = document.querySelector('.btn-cancel');
       btn.disabled = true;
-      btn.textContent = '訂單傳送中…';
+      btnCancel.disabled = true;
+      btn.classList.add('btn--loading');
       
       const payload = {
         data: { name: customerNameInput.value.trim(), phone: customerPhoneInput.value.trim(), remarks: remarksInput.value.trim(), orders: Object.values(state.pending) }
       };
       const url = `${GAS_API_URL}?action=submitOrder&payload=${encodeURIComponent(JSON.stringify(payload))}`;
+      
       jsonpRequest(url, (err, result) => {
-        document.body.removeChild(simpleLoader);
-        btn.disabled = false;
-        btn.textContent = '確認送出';
+        btn.classList.remove('btn--loading');
         if (err || !result.success) {
           const error = err || new Error(result.error);
           handleError("訂單提交", error);
+          btn.disabled = false;
+          btnCancel.disabled = false;
           return;
         }
-        alert('訂單已成功送出！感謝您的訂購。');
-        orderForm.reset();
-        state.pending = {};
-        document.querySelectorAll('.category-btn.active').forEach(b => b.classList.remove('active'));
-        itemsContainer.innerHTML = '<div class="info-message">請先選擇一個商品系列</div>';
-        confirmModal.classList.remove('active');
+        
+        btn.classList.add('btn--success');
+        
+        setTimeout(() => {
+            confirmModal.classList.remove('active');
+            orderForm.reset();
+            state.pending = {};
+            document.querySelectorAll('.category-btn.active').forEach(b => b.classList.remove('active'));
+            document.getElementById('itemsContainer').innerHTML = '<div class="info-message">請先選擇一個商品系列</div>';
+            setTimeout(() => {
+                btn.disabled = false;
+                btnCancel.disabled = false;
+                btn.classList.remove('btn--success');
+            }, 500);
+        }, 2000);
       });
     }
     
     // --- Event Listeners and Modal Logic ---
     document.addEventListener('DOMContentLoaded', initializeApp);
-    categoryContainer.addEventListener('click', e => { if (e.target.matches('.category-btn')) { document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active')); e.target.classList.add('active'); renderItems(e.target.dataset.category); } });
+    document.getElementById('categoryContainer').addEventListener('click', e => { if (e.target.matches('.category-btn')) { document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active')); e.target.classList.add('active'); renderItems(e.target.dataset.category); } });
     orderForm.addEventListener('submit', e => { e.preventDefault(); if (!customerNameInput.value.trim()) { alert('請填寫訂購人或公司名稱！'); return; } if (Object.keys(state.pending).length === 0) { alert('請至少選擇一項商品！'); return; } showConfirmModal(); });
     function showConfirmModal() { const orders = Object.values(state.pending); const listContainer = document.getElementById('confirmList'); const summaryContainer = document.getElementById('summaryContainer'); listContainer.innerHTML = ''; summaryContainer.innerHTML = ''; if (orders.length > 0) { let subtotal = 0; orders.forEach(order => { subtotal += (order.price || 0) * order.qty; listContainer.innerHTML += `<div class="confirm-item"><img src="${order.imageUrl || 'https://via.placeholder.com/300?text=No+Image'}" alt="${order.item}" class="confirm-item__img"><div class="confirm-item__info"><span class="confirm-item__name">${order.item}</span><span class="confirm-item__price">NT$ ${order.price}</span></div><span class="confirm-item__qty">x ${order.qty}</span><button type="button" class="remove-btn" data-item-name="${order.item}" aria-label="移除此項商品">🗑️</button></div>`; }); summaryContainer.innerHTML = `<div class="summary-row"><span>商品小計</span><span>NT$ ${subtotal}</span></div><div class="summary-row total"><span>訂單總金額</span><span>NT$ ${subtotal}</span></div>`; } else { listContainer.innerHTML = '<div>您的訂單是空的。</div>'; } confirmModal.classList.add('active'); document.querySelector('.btn-confirm').disabled = orders.length === 0; }
-    confirmModal.addEventListener('click', e => { if (e.target.matches('.btn-cancel')) { confirmModal.classList.remove('active'); } else if (e.target.matches('.remove-btn')) { const itemName = e.target.dataset.itemName; delete state.pending[itemName]; const activeCategory = document.querySelector('.category-btn.active')?.dataset.category; if (activeCategory) renderItems(activeCategory); showConfirmModal(); } else if (e.target.matches('.btn-confirm')) { submitOrder(); } });
+    
+    // 【JS 修正】使用 .closest() 來確保點擊事件能被正確捕捉
+    confirmModal.addEventListener('click', e => {
+      if (e.target.closest('.btn-cancel')) {
+        confirmModal.classList.remove('active');
+      } else if (e.target.closest('.remove-btn')) {
+        const itemName = e.target.closest('.remove-btn').dataset.itemName;
+        delete state.pending[itemName];
+        const activeCategory = document.querySelector('.category-btn.active')?.dataset.category;
+        if (activeCategory) renderItems(activeCategory);
+        showConfirmModal();
+      } else if (e.target.closest('.btn-confirm')) {
+        submitOrder();
+      }
+    });
   </script>
 </body>
 </html>
